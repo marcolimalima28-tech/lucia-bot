@@ -12,67 +12,57 @@ CANAL_BIENVENIDA  = "bienvenida"          # nombre del canal de bienvenida
 CANAL_GUIA        = "guía-del-servidor"   # nombre del canal de la guía
 ROL_NUEVO_MIEMBRO = "Nuevo Miembro"       # rol que se asigna automáticamente (opcional)
 
-GUIA_TITULO = "📖  Guía del Servidor"
+GUIA_TITULO = "⚔️  Guía de Santa Lucía — MU Online Season 21 Part 2-3"
+COLOR_ORO  = discord.Color.from_rgb(232, 181, 74)
+COLOR_ROJO = discord.Color.from_rgb(163, 18, 28)
 
 GUIA_CONTENIDO = """
-╔══════════════════════════════════════════╗
-║        ¡BIENVENIDO AL SERVIDOR!          ║
-╚══════════════════════════════════════════╝
+🛡️ **¡Bienvenido, guerrero, a Santa Lucía!**
+Comunidad oficial de nuestro servidor de MU Online.
 
-👋  Gracias por unirte. Aquí tienes todo lo que necesitas saber:
+**📜 REGLAS**
+1️⃣ Respeta a todos los jugadores y al staff.
+2️⃣ Prohibido el spam, flood y la publicidad de otros servidores.
+3️⃣ Prohibido usar o promover hacks, bots o exploits.
+4️⃣ Nada de estafas: el comercio es bajo tu responsabilidad.
+5️⃣ Usa cada canal para su propósito.
+6️⃣ Prohibido contenido NSFW. Cumple los términos de Discord.
 
-──────────────────────────────────────────
-📌  REGLAS DEL SERVIDOR
-──────────────────────────────────────────
-1️⃣  Respeta a todos los miembros en todo momento.
-2️⃣  No spam, publicidad no autorizada ni flood.
-3️⃣  Usa cada canal para su propósito correcto.
-4️⃣  Contenido NSFW queda totalmente prohibido.
-5️⃣  Sigue las normas de Discord: https://discord.com/terms
+**📌 INFORMACIÓN**
+#bienvenida · #reglas · #guía-del-servidor · #anuncios · #actualizaciones · #eventos
 
-──────────────────────────────────────────
-📂  CANALES PRINCIPALES
-──────────────────────────────────────────
-👋  #bienvenida       → Recibimos a los nuevos miembros
-📖  #guía-del-servidor → Estás aquí — toda la info del servidor
-💬  #general          → Chat libre para todos
-❓  #ayuda            → Pregunta lo que necesites
-🎮  #off-topic        → Memes, juegos y charla casual
+**⚔️ COMUNIDAD**
+#general · #capturas · #busco-party · #comercio · #guilds · #castle-siege
 
-──────────────────────────────────────────
-🤖  COMANDOS DEL BOT
-──────────────────────────────────────────
-!guia     → Muestra esta guía en cualquier canal
-!reglas   → Muestra las reglas del servidor
-!info     → Información del servidor
+**🆘 SOPORTE**
+#ayuda · #reportar-bugs · #tickets
 
-──────────────────────────────────────────
-🌟  CÓMO PARTICIPAR
-──────────────────────────────────────────
-✅  Preséntate en #general
-✅  Lee las reglas y respétalas
-✅  ¡Diviértete y comparte con la comunidad!
+**🤖 COMANDOS**
+`!guia` — Muestra esta guía
+`!reglas` — Reglas del servidor
+`!info` — Información del Discord
 
-──────────────────────────────────────────
-📬  CONTACTO
-──────────────────────────────────────────
-¿Tienes algún problema? Menciona a @Moderadores
-o envía un mensaje directo a los administradores.
-
-¡Esperamos que disfrutes tu estancia! 🎉
+🛡️ *Que la luz de Santa Lucía guíe tu espada.*
 """
 
 REGLAS_CONTENIDO = """
-📋  **REGLAS DEL SERVIDOR**
-
-**1.** Respeta a todos los miembros.
-**2.** No spam ni autopromoción sin permiso.
-**3.** Usa los canales correctamente.
-**4.** Prohibido el contenido NSFW.
-**5.** Cumple los [Términos de Servicio de Discord](https://discord.com/terms).
+**1.** Respeta a todos los jugadores y al staff.
+**2.** Prohibido el spam, flood y la publicidad de otros servidores.
+**3.** Prohibido usar o promover hacks, bots o exploits.
+**4.** Nada de estafas: el comercio es bajo tu responsabilidad.
+**5.** Usa cada canal para su propósito.
+**6.** Prohibido contenido NSFW. Cumple los [Términos de Discord](https://discord.com/terms).
 
 El incumplimiento puede resultar en advertencia, silencio o ban.
 """
+
+
+def buscar_canal(guild, nombre):
+    """Encuentra un canal aunque tenga emojis o prefijos (ej: '👋bienvenida')."""
+    for c in guild.text_channels:
+        if c.name == nombre or nombre in c.name:
+            return c
+    return None
 
 # ─────────────────────────────────────────
 #  INICIALIZACIÓN DEL BOT
@@ -99,7 +89,7 @@ async def on_ready():
     await bot.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.watching,
-            name="el servidor 👀"
+            name="Santa Lucía ⚔️"
         )
     )
 
@@ -110,23 +100,23 @@ async def on_member_join(member: discord.Member):
     guild = member.guild
 
     # Buscar canal de bienvenida
-    canal = discord.utils.get(guild.text_channels, name=CANAL_BIENVENIDA)
+    canal = buscar_canal(guild, CANAL_BIENVENIDA)
     if canal is None:
         canal = await crear_canal_si_no_existe(guild, CANAL_BIENVENIDA,
                                                "Canal de bienvenida para nuevos miembros")
 
     if canal:
         embed = discord.Embed(
-            title=f"👋  ¡Bienvenido/a, {member.display_name}!",
+            title=f"⚔️  ¡Bienvenido/a a Santa Lucía, {member.display_name}!",
             description=(
                 f"Hola {member.mention}, ¡nos alegra tenerte aquí! 🎉\n\n"
-                f"📖  Echa un vistazo a <#{discord.utils.get(guild.text_channels, name=CANAL_GUIA).id if discord.utils.get(guild.text_channels, name=CANAL_GUIA) else canal.id}> "
+                f"📖  Echa un vistazo a <#{buscar_canal(guild, CANAL_GUIA).id if buscar_canal(guild, CANAL_GUIA) else canal.id}> "
                 f"para conocer las reglas y canales del servidor.\n\n"
-                f"💬  Preséntate en **#general** cuando quieras.\n"
+                f"💬  Preséntate en **#general** y busca grupo en **#busco-party**.\n"
                 f"❓  Si necesitas ayuda, estamos en **#ayuda**.\n\n"
-                f"¡Disfruta tu estancia! 🌟"
+                f"🛡️ ¡Que la luz de Santa Lucía guíe tu espada!"
             ),
-            color=discord.Color.green()
+            color=COLOR_ORO
         )
         embed.set_thumbnail(url=member.display_avatar.url)
         embed.set_footer(text=f"Miembro #{guild.member_count} del servidor")
@@ -150,7 +140,7 @@ async def cmd_guia(ctx):
     embed = discord.Embed(
         title=GUIA_TITULO,
         description=GUIA_CONTENIDO,
-        color=discord.Color.blue()
+        color=COLOR_ORO
     )
     embed.set_footer(text=f"Servidor: {ctx.guild.name}")
     await ctx.send(embed=embed)
@@ -162,7 +152,7 @@ async def cmd_reglas(ctx):
     embed = discord.Embed(
         title="📋  Reglas del Servidor",
         description=REGLAS_CONTENIDO,
-        color=discord.Color.red()
+        color=COLOR_ROJO
     )
     await ctx.send(embed=embed)
 
@@ -173,7 +163,7 @@ async def cmd_info(ctx):
     guild = ctx.guild
     embed = discord.Embed(
         title=f"ℹ️  {guild.name}",
-        color=discord.Color.gold()
+        color=COLOR_ORO
     )
     embed.add_field(name="👥  Miembros", value=guild.member_count, inline=True)
     embed.add_field(name="📅  Creado el", value=guild.created_at.strftime("%d/%m/%Y"), inline=True)
@@ -199,7 +189,7 @@ async def cmd_publicar_guia(ctx):
 # ─────────────────────────────────────────
 async def crear_canal_si_no_existe(guild: discord.Guild, nombre: str, topic: str = ""):
     """Crea un canal de texto si no existe y devuelve el canal."""
-    canal = discord.utils.get(guild.text_channels, name=nombre)
+    canal = buscar_canal(guild, nombre)
     if canal is None:
         try:
             canal = await guild.create_text_channel(nombre, topic=topic)
@@ -212,7 +202,7 @@ async def crear_canal_si_no_existe(guild: discord.Guild, nombre: str, topic: str
 
 async def publicar_guia_servidor(guild: discord.Guild):
     """Publica (o actualiza) la guía en el canal designado."""
-    canal = discord.utils.get(guild.text_channels, name=CANAL_GUIA)
+    canal = buscar_canal(guild, CANAL_GUIA)
     if canal is None:
         canal = await crear_canal_si_no_existe(guild, CANAL_GUIA,
                                                "Guía oficial del servidor")
@@ -222,7 +212,7 @@ async def publicar_guia_servidor(guild: discord.Guild):
     embed = discord.Embed(
         title=GUIA_TITULO,
         description=GUIA_CONTENIDO,
-        color=discord.Color.blue()
+        color=COLOR_ORO
     )
     embed.set_footer(text=f"Servidor: {guild.name}  •  Actualizado automáticamente")
 
